@@ -17,6 +17,7 @@ workflows:
       - name: Build APK via Flet
         script: |
           cd final
-          python3 -m flet build apk Alexandra.py
+          # Вызываем flet напрямую из папки, куда его установил pip
+          /Users/builder/.pyenv/versions/3.12.7/bin/flet build apk Alexandra.py
     artifacts:
       - final/build/apk/*.apk
