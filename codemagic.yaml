@@ -17,7 +17,7 @@ workflows:
       - name: Build APK via Flet
         script: |
           cd final
-          cp Alexandra.py main.py
-          /Users/builder/.pyenv/versions/3.12.7/bin/flet build apk main.py --yes
+          # Ткнем Flet носом прямо в наш файл Alexandra.py через специальный модуль
+          /Users/builder/.pyenv/versions/3.12.7/bin/flet build apk --module-name Alexandra --yes
     artifacts:
       - final/build/apk/*.apk
