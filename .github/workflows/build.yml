@@ -30,10 +30,12 @@ jobs:
         run: pip install flet
 
       - name: Build APK
-        run: flet build apk src
+        run: |
+          # Собираем из папки src и ПРИНУДИТЕЛЬНО выкидываем результат в текущую папку
+          flet build apk src --output .
 
       - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
           name: fara-app-final
-          path: build/**/*.apk
+          path: "./*.apk"
