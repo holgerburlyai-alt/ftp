@@ -1,0 +1,24 @@
+workflows:
+  flet-android-build:
+    name: Build Alexandra APK
+    max_build_duration: 20
+    instance_type: mac_mini_m1
+    environment:
+      groups:
+        - info
+      vars:
+        FLET_PROJECT_DIR: "final"
+      python: 3.10
+    triggering:
+      events:
+        - push
+    scripts:
+      - name: Install Flet
+        script: |
+          pip install flet
+      - name: Build APK via Flet
+        script: |
+          cd final
+          flet build apk Alexandra.py
+    artifacts:
+      - final/build/apk/*.apk
