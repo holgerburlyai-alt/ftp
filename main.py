@@ -1,23 +1,26 @@
 import flet as ft
 
 def main(page: ft.Page):
-    # Базовые настройки страницы
+    # Настройки страницы для мобилки
     page.title = "FARA MOBILE SYSTEM"
     page.theme_mode = ft.ThemeMode.DARK
-    page.window_width = 400  # Для теста на компе, чтобы было похоже на телефон
-    page.window_height = 700
     page.vertical_alignment = ft.MainAxisAlignment.CENTER
     page.horizontal_alignment = ft.CrossAxisAlignment.CENTER
+    
+    # Добавим немного отступов по бокам
+    page.padding = 20
 
     # --- ФУНКЦИИ ПЕРЕКЛЮЧЕНИЯ ЭКРАНОВ ---
 
     def go_to_menu(e):
         page.clean()
         show_second_menu()
+        page.update()  # Принудительно обновляем экран
 
     def go_to_main(e):
         page.clean()
         show_main_menu()
+        page.update()  # Принудительно обновляем экран
 
     # --- ЭКРАНЫ ---
 
@@ -43,7 +46,11 @@ def main(page: ft.Page):
         page.add(
             ft.Text("СЕКРЕТ", size=32, weight="bold", color="yellow"),
             ft.Container(
-                content=ft.Text("я же надеюсь мы том и джерри посмотрим ?", text_align="center"),
+                content=ft.Text(
+                    "я же надеюсь мы том и джерри посмотрим ?", 
+                    text_align=ft.TextAlign.CENTER, 
+                    size=20
+                ),
                 padding=20
             ),
             ft.Divider(height=50, color="transparent"),
@@ -55,8 +62,11 @@ def main(page: ft.Page):
             )
         )
 
-    # Запускаем первый экран при старте
+    # Запускаем первый экран
     show_main_menu()
+    
+    # Самый важный пинок для мобилы, чтобы серый экран исчез
+    page.update()
 
 # Запуск приложения
 if __name__ == "__main__":
