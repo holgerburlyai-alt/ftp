@@ -31,11 +31,11 @@ jobs:
 
       - name: Build APK
         run: |
-          # Собираем из папки src и ПРИНУДИТЕЛЬНО выкидываем результат в текущую папку
-          flet build apk src --output .
+          # Собираем конкретно файл из папки, так робот не заблудится
+          flet build apk src/main.py
 
       - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
           name: fara-app-final
-          path: "./*.apk"
+          path: "build/apk/*.apk"
