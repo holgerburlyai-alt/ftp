@@ -17,6 +17,6 @@ workflows:
       - name: Build APK via Flet
         script: |
           cd final
-          flet build apk Alexandra.py
+          python3 -m flet build apk Alexandra.py
     artifacts:
       - final/build/apk/*.apk
