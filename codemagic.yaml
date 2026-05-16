@@ -17,7 +17,7 @@ workflows:
       - name: Build APK via Flet
         script: |
           cd final
-          # Флаг --yes затыкает Flet, и он сам всё скачает без вопросов
-          /Users/builder/.pyenv/versions/3.12.7/bin/flet build apk Alexandra.py --yes
+          cp Alexandra.py main.py
+          /Users/builder/.pyenv/versions/3.12.7/bin/flet build apk main.py --yes
     artifacts:
       - final/build/apk/*.apk
