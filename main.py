@@ -68,6 +68,5 @@ def main(page: ft.Page):
     # Самый важный пинок для мобилы, чтобы серый экран исчез
     page.update()
 
-# Запуск приложения
-if __name__ == "__main__":
-    ft.app(target=main)
+# СТРОГИЙ ЗАПУСК ДЛЯ МОБИЛЬНОЙ СБОРКИ НА GITHUB
+ft.app(main)
