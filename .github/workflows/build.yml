@@ -44,14 +44,23 @@ jobs:
         sed -i 's/^package.domain =.*/package.domain = org.fara/' buildozer.spec
         sed -i 's/^source.include_exts =.*/source.include_exts = py,png,jpg,kv,atlas/' buildozer.spec
         sed -i 's/^requirements =.*/requirements = python3,kivy/' buildozer.spec
+        # Выставляем жесткое согласие в конфиге
         sed -i 's/^#android.accept_sdk_license =.*/android.accept_sdk_license = True/' buildozer.spec
+        sed -i 's/^# android.accept_sdk_license =.*/android.accept_sdk_license = True/' buildozer.spec
 
-    - name: Force Accept Android Licenses
+    - name: Pre-download SDK and Force Accept Licenses
       run: |
-        # Находим менеджер лицензий и автоматически прожимаем "YES" на всё
-        mkdir -p ~/.android
-        touch ~/.android/repositories.cfg
-        yes | $ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager --licenses || true
+        # Заставляем Бульдозер скачать SDK, но не начинать сборку
+        buildozer android status || true
+        
+        # Находим скрытый sdkmanager, который скачал Бульдозер, и жестко прожимаем YES
+        SDK_MANAGER=$(find ~/.buildozer/ -name "sdkmanager" -type f | head -n 1)
+        if [ ! -z "$SDK_MANAGER" ]; then
+          echo "Найдена утилита: $SDK_MANAGER. Прожимаем лицензии..."
+          yes | $SDK_MANAGER --licenses || true
+        else
+          echo "sdkmanager еще не создан, лицензии будут приняты через конфиг."
+        fi
 
     - name: Build APK with Buildozer
       run: buildozer -v android debug
