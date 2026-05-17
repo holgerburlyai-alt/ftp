@@ -30,7 +30,7 @@ jobs:
 
       - name: Build APK
         run: |
-          flet build apk --module-name Alexandra
+          flet build apk --project-name alexandra main.py
 
       - name: Upload APK Artifact
         uses: actions/upload-artifact@v4
