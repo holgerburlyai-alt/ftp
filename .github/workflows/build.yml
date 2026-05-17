@@ -21,10 +21,15 @@ jobs:
       with:
         python-version: '3.11'
 
+    - name: Set up JDK
+      uses: actions/setup-java@v4
+      with:
+        distribution: 'temurin'
+        java-version: '17'
+
     - name: Install Buildozer and dependencies
       run: |
         sudo apt-get update
-        # ТУТ ВСЁ ИСПРАВЛЕНО: lld и texinfo прописаны без ошибок
         sudo apt-get install -y libsqlite3-dev lld gperf texinfo libffi-dev autoconf automake libtool pkg-config zlib1g-dev libncurses5-dev libgdbm-dev libnss3-dev libssl-dev libreadline-dev libgomp1
         pip install --upgrade pip
         pip install buildozer cython
@@ -40,7 +45,13 @@ jobs:
         sed -i 's/^source.include_exts =.*/source.include_exts = py,png,jpg,kv,atlas/' buildozer.spec
         sed -i 's/^requirements =.*/requirements = python3,kivy/' buildozer.spec
         sed -i 's/^#android.accept_sdk_license =.*/android.accept_sdk_license = True/' buildozer.spec
-        sed -i 's/^# android.accept_sdk_license =.*/android.accept_sdk_license = True/' buildozer.spec
+
+    - name: Force Accept Android Licenses
+      run: |
+        # Находим менеджер лицензий и автоматически прожимаем "YES" на всё
+        mkdir -p ~/.android
+        touch ~/.android/repositories.cfg
+        yes | $ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager --licenses || true
 
     - name: Build APK with Buildozer
       run: buildozer -v android debug
