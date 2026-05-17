@@ -24,13 +24,13 @@ jobs:
         with:
           channel: 'stable'
 
-      - name: Install dependencies
+      - name: Install Flet Dependency
         run: |
-          pip install -r requirements.txt
+          pip install flet
 
       - name: Build APK
         run: |
-          flet build apk Alexandra.py
+          flet build apk --module-name Alexandra main.py
 
       - name: Upload APK Artifact
         uses: actions/upload-artifact@v4
