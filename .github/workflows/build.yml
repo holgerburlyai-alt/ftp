@@ -5,6 +5,10 @@ on:
     branches: [ main, master ]
   workflow_dispatch:
 
+# Включаем поддержку Node 24 глобально для всего запуска
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: "true"
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -30,16 +34,22 @@ jobs:
 
     - name: Configure buildozer.spec
       run: |
-        # Тюнингуем конфиг Бульдозера под твое приложение
+        # Тюнингуем конфиг под наше приложение
         sed -i 's/^title =.*/title = AlexandraApp/' buildozer.spec
         sed -i 's/^package.name =.*/package.name = alexandraapp/' buildozer.spec
         sed -i 's/^package.domain =.*/package.domain = org.fara/' buildozer.spec
         sed -i 's/^source.include_exts =.*/source.include_exts = py,png,jpg,kv,atlas/' buildozer.spec
         sed -i 's/^requirements =.*/requirements = python3,kivy/' buildozer.spec
+        # Насильно соглашаемся с лицензией SDK Google
         sed -i 's/^#android.accept_sdk_license =.*/android.accept_sdk_license = True/' buildozer.spec
+        sed -i 's/^# android.accept_sdk_license =.*/android.accept_sdk_license = True/' buildozer.spec
 
     - name: Build APK with Buildozer
+      # Разрешаем запуск от имени root, чтобы убрать ошибку 100
       run: buildozer -v android debug
+      env:
+        BUILDOZER_ALLOW_KIVY_NEW_DESIGN: 1
+        BUILDOZER_WARN_ON_ROOT: 0
 
     - name: Upload APK Artifact
       uses: actions/upload-artifact@v4
